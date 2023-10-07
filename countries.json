@@ -1,0 +1,22 @@
+[{
+    "name": "Украина", 
+    "flag": "🇺🇦",
+    "code": "ua",
+    "services": [
+        {
+            "name": "NOVAPOSHTA.UA", 
+            "subdomain": "novaposhta",
+            "folder": "novaposhta"
+        },
+        {
+            "name": "OLX.UA", 
+            "subdomain": "olxua",
+            "folder": "olxua"
+        },
+        {
+            "name": "SHAFA.UA", 
+            "subdomain": "shafaua",
+            "folder": "shafaua"
+        }
+    ]
+}]
