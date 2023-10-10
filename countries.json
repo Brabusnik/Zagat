@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Украина",
+        "flag": "🇺🇦",
+        "code": "ua",
+        "valyta": "₴",
+        "services": [
+            {
+                "name": "NOVAPOSHTA.UA",
+                "subdomain": "novaposhta",
+                "folder": "novaposhta"
+            },
+            {
+                "name": "OLX.UA",
+                "subdomain": "olxua",
+                "folder": "olxua"
+            }
+        ]
+    },
+    {
+        "name": "Австралия",
+        "flag": "🇦🇺",
+        "code": "au",
+        "valyta": "€",
+        "services": [
+            {
+                "name": "AUPOST.AU",
+                "subdomain": "aupost.au",
+                "folder": "aupost"
+            },
+            {
+                "name": "Milanuncios",
+                "subdomain": "milanuncios",
+                "folder": "milanuncios"
+            }
+        ]
+    }
+]
